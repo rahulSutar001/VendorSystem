@@ -1,0 +1,204 @@
+generator client {
+  provider = "prisma-client-js"
+  binaryTargets = ["debian-openssl-3.0.x" ]
+} 
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Vendor {
+  Id                Int             @id @default(autoincrement())
+  Vendorname        String?
+  Email             String?
+  Mobileno          String?
+  Username          String?         @unique
+  Password          String?
+  GSTnumber         String?
+  PanNumber         String?
+  BankName          String?
+  BankAccountNumber String?
+  BankIFCcode       String?
+  BranchLocation    String?
+  Branchname        String?
+  vendorType        String?
+  vendorCategory    String?
+  categorySubtype   String?
+  User              Role?           @default(False)
+  Admin             Role?           @default(False)
+  Authoriser        Role?           @default(False)
+  Verifier          Role?           @default(False)
+  Branchlocation    Branchlocation? @relation(fields: [BranchLocationId], references: [Id])
+  BranchLocationId  Int?
+  Reports           Report[]
+  Decision          Decision[]
+  History           History[]
+}
+
+enum Role {
+  True
+  False
+}
+
+model VendorCategory {
+  Id        Int     @id @default(autoincrement())
+  vendorType   String?
+  vendorCategory String?
+}
+
+model VendorType {
+  Id           Int        @id @default(autoincrement())
+  Types        String?
+
+}
+
+model Report {
+  Id               Int             @id @default(autoincrement())
+  BillDate         DateTime          @default(now())	
+  BillNumber       BillNumber[]
+  Vendorname       String
+  VendorGSTnumber  String?
+  Paymenttype      Paymenttype     @default(PurchaseOrder)
+  Basicamount      String?
+  GSTamount        String?
+  TDS              String?
+  Total            String?
+  AdvancePayment   String?
+  PaymentAmount    String?
+  Location         String
+  Verifier         Verifier?       @default(Pending)
+  Authoriser       Authoriser?     @default(Pending)
+  Admin            Admin?          @default(Pending)
+  GSTstatus        GSTstatus?      @default(pending)
+  status           Status?         @default(Pending)
+  Vendor           Vendor?         @relation(fields: [VendorModelId], references: [Id])
+  VendorModelId    Int?
+  Branchlocation   Branchlocation? @relation(fields: [BranchlocationId], references: [Id])
+  BranchlocationId Int?
+  BranchName       String
+  BranchLocation   String
+  AssingVendor     String?
+  History          History[]
+  Decision         Decision[]
+}
+
+
+
+model BillNumber {
+  Id           Int         @id @default(autoincrement())
+  Report       Report?     @relation(fields: [ReportId], references: [Id])
+  ReportId     Int?
+ 
+}
+
+enum Paymenttype {
+  Advance
+  AgainstBill
+  PurchaseOrder
+}
+
+enum Verifier {
+  Pending
+  Approved
+  Rejected
+}
+
+enum Authoriser {
+  Pending
+  Approved
+  Rejected
+}
+
+enum Admin {
+  Pending
+  Approved
+  Rejected
+}
+
+enum GSTstatus {
+  pending
+  paid
+}
+
+model Branchlocation {
+  Id           Int        @id @default(autoincrement())
+  Vendors      Vendor[]
+  Branch       String?    @unique
+  Location     String?
+  Report       Report[]
+}
+
+enum Status {
+  Pending
+  Approved
+  Rejected
+}
+
+// historyStatus  HistoryStatus    @default(Pending)
+model History {
+  Id            Int      @id @default(autoincrement())
+  CreatedAt     DateTime @default(now())
+  DecisionId    Int?
+  Report        Report?  @relation(fields: [ReportId], references: [Id])
+  ReportId      Int?
+  Vendor        Vendor   @relation(fields: [VendorModelId], references: [Id])
+  VendorModelId Int
+  VendorName    String?
+  Comment       String
+  Approve       HS?      @default(False)
+  Rejected      HS?      @default(False)
+}
+
+enum HS {
+  True
+  False
+}
+
+model Decision {
+  Id            Int     @id @default(autoincrement())
+  Report        Report? @relation(fields: [ReportId], references: [Id])
+  ReportId      Int?  
+  Vendor        Vendor  @relation(fields: [VendorModelId], references: [Id])
+  VendorModelId Int
+  Comment       String
+  Approve       Bool?   @default(False)
+  Rejected      Bool?   @default(False)
+  VendorName    String?
+  Role          String?
+}
+
+enum Bool {
+  True
+  False
+}
+
+model requestrecheck {
+  Id              Int     @id @default(autoincrement())
+  ReportId        Int?    @unique
+  UserId          Int?
+  UserName        String?
+  UserCheck       RR?     @default(False)
+  UserComment     String?
+  AuthId          Int?
+  AuthName        String?
+  AuthCheck       RR?     @default(False)
+  AuthComment     String?
+  VerifierId      Int?
+  VerifierName    String?
+  VerifierCheck   RR?     @default(False)
+  VerifierComment String?
+  AdminId         Int?
+  AdminName       String?
+  AdminCheck      RR?     @default(False)
+  AdminComment    String?
+}
+
+enum RR {
+  True
+  False
+}
+
+
+
+

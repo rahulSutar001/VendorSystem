@@ -1,0 +1,1 @@
+.contain{display:grid;grid-template-columns:repeat(auto-fit,minmax(10rem,1fr))}.dd{width:100vw}.sidebar{flex-basis:0;flex-grow:0;overflow:hidden;transition:width .3s ease-in-out;width:0}.sidebar-content{padding:20px}.sidebar-visible{flex-basis:auto;width:300px}

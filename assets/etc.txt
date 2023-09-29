@@ -1,0 +1,14 @@
+<script>
+const d = new Date(1687104395*1000);
+let time = d;
+const dc = new Date();
+let timec = dc;
+document.getElementById("demo").innerHTML = time + timec;
+if(time > timec){
+document.write("valid")
+}
+
+if(time < timec){
+document.write("invalid")
+}
+</script>

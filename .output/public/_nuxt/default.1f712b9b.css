@@ -1,0 +1,1 @@
+.logo{width:42px}.bars,.showname{display:none}@media only screen and (width <= 500px){.bars{display:inline;transition:all .5s ease}.textvenus{font-size:min(5vh,2.7vw);margin-top:28px}.logo{margin-top:11px;width:34px}.hideUname{display:none}.showname{display:inline}}

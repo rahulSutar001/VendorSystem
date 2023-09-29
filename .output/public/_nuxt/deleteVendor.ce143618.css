@@ -1,0 +1,1 @@
+.smallscreentable{display:none}@media screen and (max-width:500px){.bigscreentable{display:none}.smallscreentable{display:block}.header{margin-left:20px}}
